@@ -497,7 +497,7 @@ class EpisodeSampler(object):
 
       for i, cid in enumerate(class_ids):
 
-        # the sequential sampling of images of original Meta-Dataset. 
+        # the sequential sampling of images of original Meta-Dataset.# no randomness just taking samples one after the other 
         if sequential_sampling:
           all_selected_files = self.dataset_spec["images_per_class"][self.class_set[cid]][:total_num_per_class[i]]
 

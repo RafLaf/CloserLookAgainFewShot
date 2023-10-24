@@ -287,7 +287,6 @@ def testing(config, dataset,data_loader, model):
     dataset.set_epoch()
     for idx, batches in enumerate(data_loader):
         dataset_index, imgs, labels = batches
-
         loss, acc = model.test_forward(imgs, labels, dataset_index)
         accs.extend(acc)
         acc = torch.mean(torch.stack(acc))
