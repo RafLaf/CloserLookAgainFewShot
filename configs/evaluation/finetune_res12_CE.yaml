@@ -27,7 +27,7 @@ DATA:
       NUM_SUPPORT: 1
       NUM_TASKS_PER_EPOCH: 2000
       NUM_WAYS: 5
-      SEQUENTIAL_SAMPLING: 1
+      SEQUENTIAL_SAMPLING: 0
       USE_BILEVEL_HIERARCHY: false
       USE_DAG_HIERARCHY: false
 GPU_ID: 0
@@ -48,3 +48,4 @@ MODEL:
   PRETRAINED: /home/raphael/Documents/models/ce_miniImageNet_res12.pth
   TYPE: fewshot_finetune
 OUTPUT: ../new_metadataset_result
+SEED: 0
