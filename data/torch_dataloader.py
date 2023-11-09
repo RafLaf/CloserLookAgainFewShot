@@ -144,6 +144,10 @@ class TorchDataset(Dataset):
 
             if self.is_episodic:
                 self.all_tasks.append([index, *self.samplers[index].sample_multiple_episode(self.batch_size, self.episode_descr_config.SEQUENTIAL_SAMPLING)])
+                if _ == 1:
+                        import traceback
+                        traceback.print_stack()
+                        print(self.all_tasks[-1][1][-2]['support'][-1])
             else:
                 self.all_tasks.append([index, *self.samplers[index].sample_batch(self.batch_size)])
 
