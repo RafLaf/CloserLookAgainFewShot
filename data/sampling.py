@@ -206,8 +206,8 @@ class EpisodeSampler(object):
 
     # Fixing seed for sampling
     self._rng = np.random.RandomState(seed)
-
-
+    self.remaining_sample = dataset_spec["images_per_class"].copy()
+    self.dataset_spec = dataset_spec["images_per_class"].copy()
     self.dataset_spec = dataset_spec
     self.split = split
 
@@ -504,8 +504,9 @@ class EpisodeSampler(object):
           self.dataset_spec["images_per_class"][self.class_set[cid]] = self.dataset_spec["images_per_class"][self.class_set[cid]][total_num_per_class[i]:]+all_selected_files
         else:
           # random sampling of images.
-          all_selected_files = self._rng.choice(self.dataset_spec["images_per_class"][self.class_set[cid]],
+          all_selected_files = self._rng.choice(self.remaining_sample[self.class_set[cid]],
                                                 total_num_per_class[i], False)
+          self.remaining_sample[self.class_set[cid]] = list(set(self.remaining_sample[self.class_set[cid]])-set(all_selected_files))
 
         for file_ in all_selected_files[total_num_per_class[i]-num_query:]:
             images["query"].append(file_)
