@@ -210,7 +210,7 @@ class EpisodeSampler(object):
     self.dataset_spec = dataset_spec["images_per_class"].copy()
     self.dataset_spec = dataset_spec
     self.split = split
-
+    self.seed =seed
     self.num_ways = episode_descr_config.NUM_WAYS
     self.num_support = episode_descr_config.NUM_SUPPORT
     self.num_query = episode_descr_config.NUM_QUERY
@@ -444,7 +444,7 @@ class EpisodeSampler(object):
 
 
       class_ids = self.sample_class_ids()
-
+      
       #cid: relative. self.class_set[cid]: absolute.
       num_images_per_class = np.array([
         len(self.dataset_spec["images_per_class"][self.class_set[cid]]) for cid in class_ids
@@ -504,9 +504,13 @@ class EpisodeSampler(object):
           self.dataset_spec["images_per_class"][self.class_set[cid]] = self.dataset_spec["images_per_class"][self.class_set[cid]][total_num_per_class[i]:]+all_selected_files
         else:
           # random sampling of images.
-          all_selected_files = self._rng.choice(self.remaining_sample[self.class_set[cid]],
+          if len(self.remaining_sample[self.class_set[cid]]) >= total_num_per_class[i]:
+            all_selected_files = self._rng.choice(self.remaining_sample[self.class_set[cid]],
                                                 total_num_per_class[i], False)
-          self.remaining_sample[self.class_set[cid]] = list(set(self.remaining_sample[self.class_set[cid]])-set(all_selected_files))
+            #self.remaining_sample[self.class_set[cid]] = [file for file in self.remaining_sample[self.class_set[cid]] if file not in all_selected_files]
+            self.remaining_sample[self.class_set[cid]] = list(set(self.remaining_sample[self.class_set[cid]])-set(all_selected_files))
+          else:
+            return None, None
 
         for file_ in all_selected_files[total_num_per_class[i]-num_query:]:
             images["query"].append(file_)
@@ -532,6 +536,8 @@ class EpisodeSampler(object):
       
       for task_index in range(batchsize):
         images, labels = self.sample_single_episode(sequtial_sampling)
+        if images is None:
+          return None, None
         all_images.append(images)
         all_labels.append(labels)
 

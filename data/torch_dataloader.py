@@ -129,7 +129,8 @@ class TorchDataset(Dataset):
     def set_epoch(self) -> None:
         # sample all tasks/batches of images of an epoch before the epoch starts
         self.all_tasks = []
-
+        self.samplers[0].remaining_sample = self.samplers[0].dataset_spec["images_per_class"].copy()
+        self.samplers[0]._rng = np.random.RandomState(self.samplers[0].seed)
         # for one-dataset batch sampling, the dataset sampler should be reset.
         if not self.is_episodic and len(self.sampling_frequency)==1:
             self.samplers[0].init()
@@ -141,13 +142,13 @@ class TorchDataset(Dataset):
 
             # dataset index
             index = find_index(random_number, self.sampling_frequency)
-
             if self.is_episodic:
-                self.all_tasks.append([index, *self.samplers[index].sample_multiple_episode(self.batch_size, self.episode_descr_config.SEQUENTIAL_SAMPLING)])
-                if _ == 1:
-                        import traceback
-                        #traceback.print_stack()
-                        print(self.all_tasks[-1][1][-2]['support'][-1])
+                all_images, all_labels = self.samplers[index].sample_multiple_episode(self.batch_size, self.episode_descr_config.SEQUENTIAL_SAMPLING)
+                self.all_tasks.append([index, all_images, all_labels])
+                if _ == 0:
+                    import traceback
+                    #traceback.print_stack()
+                    print(self.all_tasks[-1][1][-2]['support'][-1])
             else:
                 self.all_tasks.append([index, *self.samplers[index].sample_batch(self.batch_size)])
 
