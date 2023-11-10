@@ -142,13 +142,19 @@ class TorchDataset(Dataset):
 
             # dataset index
             index = find_index(random_number, self.sampling_frequency)
+            #index=0
             if self.is_episodic:
                 all_images, all_labels = self.samplers[index].sample_multiple_episode(self.batch_size, self.episode_descr_config.SEQUENTIAL_SAMPLING)
                 self.all_tasks.append([index, all_images, all_labels])
-                if _ == 0:
+                if _ == 3:
                     import traceback
                     #traceback.print_stack()
+                    print(len(self.all_tasks),len(self.all_tasks[-1]),len(self.all_tasks[-1][1]),len(self.all_tasks[-1][1][-2]['support']) )
+                    
                     print(self.all_tasks[-1][1][-2]['support'][-1])
+                    print(self.all_tasks[0][1][0]['support'][0])
+                    print(self.all_tasks[0][1][0]['support'][1])
+                    print(self.all_tasks[3][1][-1]['support'][1])
             else:
                 self.all_tasks.append([index, *self.samplers[index].sample_batch(self.batch_size)])
 

@@ -507,8 +507,8 @@ class EpisodeSampler(object):
           if len(self.remaining_sample[self.class_set[cid]]) >= total_num_per_class[i]:
             all_selected_files = self._rng.choice(self.remaining_sample[self.class_set[cid]],
                                                 total_num_per_class[i], False)
-            #self.remaining_sample[self.class_set[cid]] = [file for file in self.remaining_sample[self.class_set[cid]] if file not in all_selected_files]
-            self.remaining_sample[self.class_set[cid]] = list(set(self.remaining_sample[self.class_set[cid]])-set(all_selected_files))
+            self.remaining_sample[self.class_set[cid]] = [file for file in self.remaining_sample[self.class_set[cid]] if file not in all_selected_files]
+            #self.remaining_sample[self.class_set[cid]] = list(set(self.remaining_sample[self.class_set[cid]])-set(all_selected_files))
           else:
             return None, None
 
