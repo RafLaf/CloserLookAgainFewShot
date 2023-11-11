@@ -124,7 +124,7 @@ class TorchDataset(Dataset):
 
 
     def __len__(self):
-        return self.iteration_per_epoch
+        return len(self.all_tasks)
 
     def set_epoch(self) -> None:
         # sample all tasks/batches of images of an epoch before the epoch starts
@@ -145,18 +145,15 @@ class TorchDataset(Dataset):
             #index=0
             if self.is_episodic:
                 all_images, all_labels = self.samplers[index].sample_multiple_episode(self.batch_size, self.episode_descr_config.SEQUENTIAL_SAMPLING)
+                if all_images is None:
+                    break
                 self.all_tasks.append([index, all_images, all_labels])
-                if _ == 3:
-                    import traceback
-                    #traceback.print_stack()
-                    print(len(self.all_tasks),len(self.all_tasks[-1]),len(self.all_tasks[-1][1]),len(self.all_tasks[-1][1][-2]['support']) )
-                    
-                    print(self.all_tasks[-1][1][-2]['support'][-1])
-                    print(self.all_tasks[0][1][0]['support'][0])
-                    print(self.all_tasks[0][1][0]['support'][1])
-                    print(self.all_tasks[3][1][-1]['support'][1])
+
+                print(self.all_tasks[_][1][-1]['query'][1])
             else:
                 self.all_tasks.append([index, *self.samplers[index].sample_batch(self.batch_size)])
+        self.__len__()
+
 
     def __getitem__(self, index):
         # sanple a task/batch
