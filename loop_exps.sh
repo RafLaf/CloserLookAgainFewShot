@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Base directory where the YAML files are stored
-base_dir="./configs/exps"
+base_dir="./configs/exps/dino"
 
 # Loop through each method
 for method in "NCC" "finetune" "LR" "matchingnet"; do
@@ -19,7 +19,9 @@ for method in "NCC" "finetune" "LR" "matchingnet"; do
 
             echo "Running experiment with config: $yaml_file"
             # Run the Python command with the YAML configuration
-            python main.py --cfg "$yaml_file" --save-stats "${method}_${dataset}.pt"
+            mkdir results/dino/"$method"
+            python main.py --cfg "$yaml_file" --save-stats results/dino/"$method"/"$dataset".pt
+            
         done
     else
         echo "Directory for method $method does not exist."

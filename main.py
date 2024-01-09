@@ -311,8 +311,9 @@ def testing(config, dataset,data_loader, model):
                 f'Time {batch_time.val:.2f} ({batch_time.avg:.2f})\t'
                 f'Loss {loss_meter.val:.2f} ({loss_meter.avg:.2f})\t'
                 f'Acc@1 {acc_meter.val:.2f} ({acc_meter.avg:.2f})\t')
+
     accs = torch.stack(accs)
-    if args.save_stats:
+    if args.save_stats:        
         torch.save(accs, args.save_stats)
     ci = (1.96*torch.std(accs)/math.sqrt(accs.shape[0])).item()
     return acc_meter.avg, loss_meter.avg, ci

@@ -90,10 +90,12 @@ Data["DATA"]["IMG_SIZE"] = 224
 #Data["MODEL"]["BACKBONE"] = 'resnet12'
 # Data["MODEL"]["BACKBONE"] = '
 # resnet50'
-Data["MODEL"]["BACKBONE"] = 'clip'
+#Data["MODEL"]["BACKBONE"] = 'clip'
+Data["MODEL"]["BACKBONE"] = 'DINO_ViT'
+Data["MODEL"]["BACKBONE_HYPERPARAMETERS"] = ['base', 16]
 
 #Data["MODEL"]["PRETRAINED"] = '/home/raphael/Documents/models/ce_miniImageNet_res12.pth'# for example
-
+Data["MODEL"]["PRETRAINED"] = '/home/raphael/Documents/models/DINO/dino_vitbase16_pretrain.pth'
 #Data["DATA"]["NUM_WORKERS"] = 8
 
 
@@ -107,11 +109,11 @@ Data["MODEL"]["TYPE"] = "fewshot_finetune"
 #Data["MODEL"]["TYPE"] = "Episodic_Model"
 Data["MODEL"]["CLASSIFIER"] = "finetune"
 #Data["MODEL"]["CLASSIFIER"] = "eTT"
-#Data["MODEL"]["CLASSIFIER_PARAMETERS"] = [100,100,10,0.02,0.1,False,False,"fc"]# finetune_batchsize,query_feedingbatchsize,epoch,backbone_lr,classifer_lr,use_alpha,use_beta, mode
+Data["MODEL"]["CLASSIFIER_PARAMETERS"] = [100,100,10,0.02,0.1,False,False,"fc"]# finetune_batchsize,query_feedingbatchsize,epoch,backbone_lr,classifer_lr,use_alpha,use_beta, mode
 #Data["MODEL"]["CLASSIFIER_PARAMETERS"] = [100,100,10,0.02,0.1,False,False,"fc"]# finetune
 #Data["MODEL"]["CLASSIFIER_PARAMETERS"] = [100,100,10,0.02,0.1,True,True,"NCC"]# tsa
 # Data["MODEL"]["CLASSIFIER_PARAMETERS"] = [100,100,10,0.02,0.1,False,True,"NCC"]# URL
-Data["MODEL"]["CLASSIFIER_PARAMETERS"] = [100,100,0,0.0,0.0,False,False,"NCC"]# NCC
+#Data["MODEL"]["CLASSIFIER_PARAMETERS"] = [100,100,0,0.0,0.0,False,False,"NCC"]# NCC
 # Data["MODEL"]["CLASSIFIER_PARAMETERS"] = [100,100,10,0.02,0.1,False,False,"cc"]# CC
 # Data["MODEL"]["CLASSIFIER_PARAMETERS"] = [100,100,10,0.02,0.1,"eTT"]# eTT
 
