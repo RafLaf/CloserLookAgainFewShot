@@ -148,12 +148,18 @@ def test(config):
         load_pretrained(config, model, logger)
 
     # if model has adapters like in TSA
-    if hasattr(model, 'mode') and model.mode == "NCC":
+    #print(config.MODEL.CLASSIFIER_PARAMETERS)
+    if config.MODEL.TYPE=='fewshot_finetune':
+        condition  = config.MODEL.CLASSIFIER_PARAMETERS[-2] or config.MODEL.CLASSIFIER_PARAMETERS[-3]
+    else:
+        condition = False
+
+    if hasattr(model, 'mode') and model.mode == "NCC" and condition:
         model.append_adapter()
 
 
     logger.info("Start testing")
-
+    
     with torch.no_grad():
         acc1, loss, ci = testing(config, test_dataset, test_dataloader, model)
     logger.info(f"Test Accuracy of {config.DATA.TEST.DATASET_NAMES[0]}: {acc1:.2f}%+-{ci:.2f}")

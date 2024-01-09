@@ -8,7 +8,7 @@ all_roots["Quick Draw"] = "PATH-TO-quickdraw" #2
 all_roots["Birds"] = "PATH-TO-CUB" #3
 all_roots["VGG Flower"] = "PATH-TO-vggflower" #4
 all_roots["Aircraft"] = "PATH-TO-aircraft"  #5
-all_roots["Traffic Signs"] = "PATH-TO-traffic" #6
+all_roots["Traffic Signs"] = "/home/datasets/GTSRB/Final_Training/Images/" #6
 all_roots["MSCOCO"] = "PATH-TO-coco" #7
 all_roots["Textures"] = "PATH-TO-dtd" #8
 all_roots["Fungi"] = "PATH-TO-fungi" #9
@@ -65,11 +65,11 @@ Data["OUTPUT"] = "../new_metadataset_result"
 Data["MODEL"] = {}
 
 Data["MODEL"]["NAME"] = "evaluation"
-Data["GPU_ID"] = 2
+Data["GPU_ID"] = 0
 
 # 1 if use sequential sampling in the oroginal biased Meta-Dataset sampling procedure, 0 unbiased.
 # 1 can be used to re-implement the results in the ICML 2023 paper (except traffic signs); 0, however, is recommended for unbiased results
-Data["DATA"]["TEST"]["EPISODE_DESCR_CONFIG"]["SEQUENTIAL_SAMPLING"] = 1
+Data["DATA"]["TEST"]["EPISODE_DESCR_CONFIG"]["SEQUENTIAL_SAMPLING"] = 0
 
 Data["AUG"] = {}
 
@@ -86,14 +86,15 @@ Data["AUG"]["STD"] = [0.2726, 0.2634, 0.2794]
 
 # miniImageNet
 Data["DATA"]["IMG_SIZE"] = 84
+Data["DATA"]["IMG_SIZE"] = 224
+#Data["MODEL"]["BACKBONE"] = 'resnet12'
+# Data["MODEL"]["BACKBONE"] = '
+# resnet50'
+Data["MODEL"]["BACKBONE"] = 'clip'
 
-Data["MODEL"]["BACKBONE"] = 'resnet12'
-# Data["MODEL"]["BACKBONE"] = 'resnet50'
-# Data["MODEL"]["BACKBONE"] = 'clip'
+#Data["MODEL"]["PRETRAINED"] = '/home/raphael/Documents/models/ce_miniImageNet_res12.pth'# for example
 
-Data["MODEL"]["PRETRAINED"] = '../pretrained_models/ce_miniImageNet_res12.ckpt'# for example
-
-Data["DATA"]["NUM_WORKERS"] = 8
+#Data["DATA"]["NUM_WORKERS"] = 8
 
 
 # True for re-implementing the results in the ICML 2023 paper.
@@ -102,24 +103,26 @@ Data["AUG"]["TEST_CROP"] = True
 Data["DATA"]["TEST"]["EPISODE_DESCR_CONFIG"]["NUM_TASKS_PER_EPOCH"] = 2000
 
 # some examples of gradient-based methods. Hyperparameters need to be tuned by using search_hyperparameter.py
-Data["MODEL"]["TYPE"] = "fewshot_finetune"
-Data["MODEL"]["CLASSIFIER"] = "finetune"
-# Data["MODEL"]["CLASSIFIER"] = "eTT"
-# Data["MODEL"]["CLASSIFIER_PARAMETERS"] = [100,100,10,0.02,0.1,False,False,"fc"]# finetune_batchsize,query_feedingbatchsize,epoch,backbone_lr,classifer_lr,use_alpha,use_beta, mode
-Data["MODEL"]["CLASSIFIER_PARAMETERS"] = [100,100,10,0.02,0.1,False,False,"fc"]# finetune
-# Data["MODEL"]["CLASSIFIER_PARAMETERS"] = [100,100,10,0.02,0.1,True,True,"NCC"]# tsa
+#Data["MODEL"]["TYPE"] = "fewshot_finetune"
+#Data["MODEL"]["TYPE"] = "Episodic_Model"
+#Data["MODEL"]["CLASSIFIER"] = "finetune"
+#Data["MODEL"]["CLASSIFIER"] = "eTT"
+#Data["MODEL"]["CLASSIFIER_PARAMETERS"] = [100,100,10,0.02,0.1,False,False,"fc"]# finetune_batchsize,query_feedingbatchsize,epoch,backbone_lr,classifer_lr,use_alpha,use_beta, mode
+#Data["MODEL"]["CLASSIFIER_PARAMETERS"] = [100,100,10,0.02,0.1,False,False,"fc"]# finetune
+#Data["MODEL"]["CLASSIFIER_PARAMETERS"] = [100,100,10,0.02,0.1,True,True,"NCC"]# tsa
 # Data["MODEL"]["CLASSIFIER_PARAMETERS"] = [100,100,10,0.02,0.1,False,True,"NCC"]# URL
+#Data["MODEL"]["CLASSIFIER_PARAMETERS"] = [100,100,0,0.0,0.0,False,False,"NCC"]# NCC
 # Data["MODEL"]["CLASSIFIER_PARAMETERS"] = [100,100,10,0.02,0.1,False,False,"cc"]# CC
 # Data["MODEL"]["CLASSIFIER_PARAMETERS"] = [100,100,10,0.02,0.1,"eTT"]# eTT
 
 # other adaptation classifiers
-# Data["MODEL"]["TYPE"] = "Episodic_Model"
-# Data["MODEL"]["CLASSIFIER"] = "LR"
-# Data["MODEL"]["CLASSIFIER"] = "metaopt"
-# Data["MODEL"]["CLASSIFIER"] = "proto_head"
-# Data["MODEL"]["CLASSIFIER"] = "MatchingNet"
+Data["MODEL"]["TYPE"] = "Episodic_Model"
+Data["MODEL"]["CLASSIFIER"] = "LR"
+#Data["MODEL"]["CLASSIFIER"] = "metaopt"
+#Data["MODEL"]["CLASSIFIER"] = "proto_head"
+#Data["MODEL"]["CLASSIFIER"] = "MatchingNet"
 
 if not os.path.exists('./configs/evaluation'):
    os.makedirs('./configs/evaluation')
-with open('./configs/evaluation/finetune_res12_CE.yaml', 'w') as f:
+with open('./configs/evaluation/finetune_res12_CC.yaml', 'w') as f:
    yaml.dump(data=Data, stream=f)

@@ -17,12 +17,13 @@ class FinetuneModule(nn.Module):
         self.mode = config.MODEL.CLASSIFIER_PARAMETERS[-1]
 
         
-        if not self.mode == "NCC":
+        if not self.mode == "NCC" or not (config.MODEL.CLASSIFIER_PARAMETERS[-2] or config.MODEL.CLASSIFIER_PARAMETERS[-3]):
             classifier_hyperparameters = [self.backbone]+config.MODEL.CLASSIFIER_PARAMETERS
             self.classifier = get_classifier(config.MODEL.CLASSIFIER, *classifier_hyperparameters)
     
     def append_adapter(self):
-        # append adapter to the backbone
+        # append TSA adapter to the backbone (some intermediate layers (alpha) + pre-classifier alignment (Beta))
+        #only coded for Resnets
         self.backbone = get_backbone("resnet_tsa",backbone=self.backbone)
         classifier_hyperparameters = [self.backbone]+self.config.MODEL.CLASSIFIER_PARAMETERS
         self.classifier = get_classifier(self.config.MODEL.CLASSIFIER, *classifier_hyperparameters)
