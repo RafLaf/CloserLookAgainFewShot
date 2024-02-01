@@ -2,16 +2,16 @@ import yaml
 import os
 
 all_roots = {}
-all_roots["ILSVRC"] = "PATH-TO-IMAGENET" #0
-all_roots["Omniglot"] = "/home/datasets/omniglot/" #1
-all_roots["Quick Draw"] = "PATH-TO-quickdraw" #2
-all_roots["Birds"] = "/home/datasets/CUB_200_2011/" #3
-all_roots["VGG Flower"] = "/home/datasets/vgg_flower/" #4
-all_roots["Aircraft"] = "/home/datasets/fgvc-aircraft-2013b/converted/"  #5
-all_roots["Traffic Signs"] = "/home/datasets/GTSRB/Final_Training/Images/" #6
-all_roots["MSCOCO"] = "/home/datasets/mscoco/imgs_g/" #7
-all_roots["Textures"] = "/home/datasets/dtd/" #8
-all_roots["Fungi"] = "/home/datasets/fungi/" #9
+all_roots["imagenet"] = "PATH-TO-IMAGENET" #0
+all_roots["omniglot"] = "/home/datasets/omniglot/" #1
+all_roots["quickdraw"] = "/home/datasets/quickdraw/converted/" #2
+all_roots["cub"] = "/home/datasets/CUB_200_2011/" #3
+all_roots["vgg_flower"] = "/home/datasets/vgg_flower/" #4
+all_roots["aircraft"] = "/home/datasets/fgvc-aircraft-2013b/converted/"  #5
+all_roots["traffic_signs"] = "/home/datasets/GTSRB/Final_Training/Images/" #6
+all_roots["mscoco"] = "/home/datasets/mscoco/imgs_g/" #7
+all_roots["dtd"] = "/home/datasets/dtd/" #8
+all_roots["fungi"] = "/home/datasets/fungi/" #9
 all_roots["MNIST"] = "PATH-TO-mnist" #10
 all_roots["CIFAR10"] = "PATH-TO-cifar10" #11
 all_roots["CIFAR100"] = "PATH-TO-cifar100" #12
@@ -36,7 +36,7 @@ Data["DATA"]["TEST"] = {}
 # 5 way 1 shot example
 Data["DATA"]["TEST"]["EPISODE_DESCR_CONFIG"] = {}
 Data["DATA"]["TEST"]["EPISODE_DESCR_CONFIG"]["NUM_WAYS"] = 5
-Data["DATA"]["TEST"]["EPISODE_DESCR_CONFIG"]["NUM_SUPPORT"] = 1
+Data["DATA"]["TEST"]["EPISODE_DESCR_CONFIG"]["NUM_SUPPORT"] = 5
 Data["DATA"]["TEST"]["EPISODE_DESCR_CONFIG"]["NUM_QUERY"] = 15
 Data["DATA"]["TEST"]["EPISODE_DESCR_CONFIG"]["MAX_NUM_QUERY"] = 15
 Data["DATA"]["TEST"]["EPISODE_DESCR_CONFIG"]["USE_DAG_HIERARCHY"] = False
@@ -89,9 +89,17 @@ Data["DATA"]["IMG_SIZE"] = 224
 #Data["MODEL"]["BACKBONE"] = 'resnet12'
 # Data["MODEL"]["BACKBONE"] = '
 # resnet50'
-#Data["MODEL"]["BACKBONE"] = 'clip'
-Data["MODEL"]["BACKBONE"] = 'DINO_ViT'
-Data["MODEL"]["BACKBONE_HYPERPARAMETERS"] = ['base', 16]
+CLIP=False
+if CLIP:
+   Data["MODEL"]["BACKBONE"] = 'clip'
+   model='clip'
+else:
+   Data["MODEL"]["BACKBONE"] = 'DINO_ViT'
+   Data["MODEL"]["BACKBONE_HYPERPARAMETERS"] = ['base', 16]
+   Data["MODEL"]["PRETRAINED"] = '/home/raphael/Documents/models/DINO/dino_vitbase16_pretrain.pth'
+   model='dino'
+
+
 #Data["MODEL"]["PRETRAINED"] = '/home/raphael/Documents/models/ce_miniImageNet_res12.pth'# for example
 
 #Data["DATA"]["NUM_WORKERS"] = 8
@@ -122,7 +130,7 @@ Data["DATA"]["TEST"]["EPISODE_DESCR_CONFIG"]["NUM_TASKS_PER_EPOCH"] = 2000
 #Data["MODEL"]["CLASSIFIER"] = "proto_head"
 #Data["MODEL"]["CLASSIFIER"] = "MatchingNet"
 
-list_methods  = ['NCC', 'finetune', 'LR', 'matchingnet']
+list_methods  = ['NCC', 'finetune', 'LR', 'matchingnet', 'protohead']
 for method in list_methods:
    if method in ['NCC', 'finetune']:
       Data["MODEL"]["TYPE"] = "fewshot_finetune"
@@ -130,7 +138,7 @@ for method in list_methods:
       if method == 'NCC':
          Data["MODEL"]["CLASSIFIER_PARAMETERS"] = [100,100,0,0.0,0.0,False,False,"NCC"]
       elif method == 'finetune':
-         Data["MODEL"]["CLASSIFIER_PARAMETERS"] = [100,100,0,0.0,0.0,False,False,"fc"]
+         Data["MODEL"]["CLASSIFIER_PARAMETERS"] = [100,100,10,0.02,0.1,False,False,"fc"]
    elif method == 'LR':
       Data["MODEL"]["TYPE"] = "Episodic_Model"
       Data["MODEL"]["CLASSIFIER"] = "LR"
@@ -140,12 +148,12 @@ for method in list_methods:
       Data["MODEL"]["CLASSIFIER"] = "MatchingNet"
       Data["MODEL"]["CLASSIFIER_PARAMETERS"]=[]
 
-   for i in range(3,9):
+   for i in range(1,10):
       dataset = names[i]
       Data["DATA"]["TEST"]["DATASET_ROOTS"] = [roots[i]]
       Data["DATA"]["TEST"]["DATASET_NAMES"] = [dataset]
 
-      if not os.path.exists('./configs/exps/dino/{}'.format(method)):
-         os.makedirs('./configs/exps/dino/{}'.format(method))
-      with open('./configs/exps/dino/{}/{}.yaml'.format(method,dataset), 'w') as f:
+      if not os.path.exists('./configs/exps/{}/{}'.format(model,method)):
+         os.makedirs('./configs/exps/{}/{}'.format(model,method))
+      with open('./configs/exps/{}/{}/{}.yaml'.format(model,method,dataset), 'w') as f:
          yaml.dump(data=Data, stream=f)

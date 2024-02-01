@@ -3,15 +3,15 @@ import os
 
 all_roots = {}
 all_roots["ILSVRC"] = "PATH-TO-IMAGENET" #0
-all_roots["Omniglot"] = "PATH-TO-omniglot" #1
-all_roots["Quick Draw"] = "PATH-TO-quickdraw" #2
-all_roots["Birds"] = "PATH-TO-CUB" #3
-all_roots["VGG Flower"] = "PATH-TO-vggflower" #4
-all_roots["Aircraft"] = "PATH-TO-aircraft"  #5
-all_roots["Traffic Signs"] = "PATH-TO-traffic" #6
-all_roots["MSCOCO"] = "PATH-TO-coco" #7
-all_roots["Textures"] = "PATH-TO-dtd" #8
-all_roots["Fungi"] = "PATH-TO-fungi" #9
+all_roots["Omniglot"] = "/home/datasets/omniglot/" #1
+all_roots["Quick Draw"] = "/home/datasets/quickdraw/converted/" #2
+all_roots["Birds"] = "/home/datasets/CUB_200_2011/" #3
+all_roots["VGG Flower"] = "/home/datasets/vgg_flower/" #4
+all_roots["Aircraft"] = "/home/datasets/fgvc-aircraft-2013b/converted/"  #5
+all_roots["Traffic Signs"] = "/home/datasets/GTSRB/Final_Training/Images/" #6
+all_roots["MSCOCO"] = "/home/datasets/mscoco/imgs_g/" #7
+all_roots["Textures"] = "/home/datasets/dtd/" #8
+all_roots["Fungi"] = "/home/datasets/fungi/" #9
 all_roots["MNIST"] = "PATH-TO-mnist" #10
 all_roots["CIFAR10"] = "PATH-TO-cifar10" #11
 all_roots["CIFAR100"] = "PATH-TO-cifar100" #12
@@ -31,8 +31,8 @@ roots = list(all_roots.values())
 Data["DATA"]["VALID"] = {}
 
 
-Data["DATA"]["VALID"]["DATASET_ROOTS"] = [roots[2]]
-Data["DATA"]["VALID"]["DATASET_NAMES"] = [names[2]]
+Data["DATA"]["VALID"]["DATASET_ROOTS"] = [roots[7]]
+Data["DATA"]["VALID"]["DATASET_NAMES"] = [names[7]]
 
 
 Data["DATA"]["VALID"]["EPISODE_DESCR_CONFIG"] = {}
@@ -47,7 +47,7 @@ Data["OUTPUT"] = "../new_metadataset_result"
 Data["MODEL"] = {}
 
 Data["MODEL"]["NAME"] = "evaluation"
-Data["GPU_ID"] = 2
+Data["GPU_ID"] = 0
 
 # 1 if use sequential sampling in the original false Meta-Dataset sampling
 # 1 used to re-implement the results in the ICML 2023 paper; 0, however, is recommended
@@ -68,10 +68,9 @@ Data["AUG"]["STD"] = [0.2726, 0.2634, 0.2794]
 # Data["DATA"]["IMG_SIZE"] = 224
 
 # miniImageNet
-Data["DATA"]["IMG_SIZE"] = 84
+Data["DATA"]["IMG_SIZE"] = 224
 
-Data["MODEL"]["BACKBONE"] = 'resnet12'
-Data["MODEL"]["PRETRAINED"] = '../pretrained_models/ce_miniImageNet_res12.ckpt'# for example
+Data["MODEL"]["BACKBONE"] = 'clip'
 
 Data["DATA"]["NUM_WORKERS"] = 8
 
@@ -103,5 +102,5 @@ Data["SEARCH_HYPERPARAMETERS"]["EPOCH_RANGE"] = [10,20,30]
 
 if not os.path.exists('./configs/search'):
    os.makedirs('./configs/search')
-with open('./configs/search/finetune_res12_CE.yaml', 'w') as f:
+with open('./configs/search/finetune_clip.yaml', 'w') as f:
    yaml.dump(data=Data, stream=f)

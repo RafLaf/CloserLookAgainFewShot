@@ -435,16 +435,22 @@ class EpisodeSampler(object):
       ids_rel = [
           class_id - self.class_set[0] for class_id in self._filtered_class_set
       ]
+      
+      ids_rel = [cid for cid in ids_rel if len(self.remaining_sample[self.class_set[cid]]) >= self.num_support + self.num_query]
+
+      if len(ids_rel) < num_ways:
+        return None
       episode_classes_rel = sample_class_ids_uniformly(
           num_ways, ids_rel, rng=self._rng)
-
+      
     return episode_classes_rel
 
   def sample_single_episode(self, sequential_sampling = False):
 
 
       class_ids = self.sample_class_ids()
-      
+      if class_ids is None:
+        return None, None
       #cid: relative. self.class_set[cid]: absolute.
       num_images_per_class = np.array([
         len(self.dataset_spec["images_per_class"][self.class_set[cid]]) for cid in class_ids

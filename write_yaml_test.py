@@ -90,12 +90,12 @@ Data["DATA"]["IMG_SIZE"] = 224
 #Data["MODEL"]["BACKBONE"] = 'resnet12'
 # Data["MODEL"]["BACKBONE"] = '
 # resnet50'
-#Data["MODEL"]["BACKBONE"] = 'clip'
-Data["MODEL"]["BACKBONE"] = 'DINO_ViT'
-Data["MODEL"]["BACKBONE_HYPERPARAMETERS"] = ['base', 16]
+Data["MODEL"]["BACKBONE"] = 'clip'
+#Data["MODEL"]["BACKBONE"] = 'DINO_ViT'
+#Data["MODEL"]["BACKBONE_HYPERPARAMETERS"] = ['base', 16]
 
 #Data["MODEL"]["PRETRAINED"] = '/home/raphael/Documents/models/ce_miniImageNet_res12.pth'# for example
-Data["MODEL"]["PRETRAINED"] = '/home/raphael/Documents/models/DINO/dino_vitbase16_pretrain.pth'
+#Data["MODEL"]["PRETRAINED"] = '/home/raphael/Documents/models/DINO/dino_vitbase16_pretrain.pth'
 #Data["DATA"]["NUM_WORKERS"] = 8
 
 

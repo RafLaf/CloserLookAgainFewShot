@@ -173,6 +173,10 @@ def test(config):
         result_dic = {}
 
     # by default, we assume there is only one dataset to be tested at a time.
+    print(config.DATA.TEST.DATASET_NAMES[0])
+    print(acc1, ci)
+    print(result_dic)
+
     result_dic[f"{config.DATA.TEST.DATASET_NAMES[0]}"]=[acc1, ci]
 
     with open(path, 'w') as f:
@@ -313,9 +317,10 @@ def testing(config, dataset,data_loader, model):
                 f'Acc@1 {acc_meter.val:.2f} ({acc_meter.avg:.2f})\t')
 
     accs = torch.stack(accs)
+    print(accs)
     if args.save_stats:        
         torch.save(accs, args.save_stats)
-    ci = (1.96*torch.std(accs)/math.sqrt(accs.shape[0])).item()
+    ci = (1.96*torch.std(accs)/math.sqrt(accs.shape[0])).item()  #should be student's t distribution
     return acc_meter.avg, loss_meter.avg, ci
 
 if __name__ == '__main__':

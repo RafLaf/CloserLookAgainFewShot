@@ -1,10 +1,11 @@
 #!/bin/bash
-
+model=$1
 # Base directory where the YAML files are stored
-base_dir="./configs/exps/dino"
+base_dir="./configs/exps/"$model""
 
 # Loop through each method
-for method in "NCC" "finetune" "LR" "matchingnet"; do
+for method in "NCC" "finetune" "LR" "matchingnet" "protohead"; do
+#for method in  "finetune" "LR" ; do
     # Path to the method's directory
     method_dir="$base_dir/$method"
 
@@ -19,11 +20,11 @@ for method in "NCC" "finetune" "LR" "matchingnet"; do
 
             echo "Running experiment with config: $yaml_file"
             # Run the Python command with the YAML configuration
-            mkdir results/dino/"$method"
-            python main.py --cfg "$yaml_file" --save-stats results/dino/"$method"/"$dataset".pt
+            mkdir results/"$model"/"$method"
+            python main.py --cfg "$yaml_file" --save-stats results/5-shot/"$model"/"$method"/"$dataset".pt
             
         done
     else
-        echo "Directory for method $method does not exist."
+        echo "Directory for method $method and $model does not exist."
     fi
 done
