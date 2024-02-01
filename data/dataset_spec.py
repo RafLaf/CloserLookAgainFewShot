@@ -134,25 +134,25 @@ def create_spec(dataset_name, root, path_to_words=None, path_to_is_a = None, pat
   """
   create a dataset specification.
   """
-  if dataset_name == "Textures":
+  if dataset_name == "dtd":
     return create_DTD_spec(root)
   elif dataset_name == "ILSVRC":
     return create_ImageNet_spec(root, path_to_words, path_to_is_a, path_to_num_leaf_images, train_split_only)
-  elif dataset_name == "Omniglot":
+  elif dataset_name == "omniglot":
     return create_Omniglot_spec(root)
-  elif dataset_name == "Quick Draw":
+  elif dataset_name == "quickdraw":
     return create_QuickDraw_spec(root)
-  elif dataset_name == "Birds":
+  elif dataset_name == "cub":
     return create_CUB_spec(root)
-  elif dataset_name == "VGG Flower":
+  elif dataset_name == "vgg_flower":
     return create_VGGFlower_spec(root)
-  elif dataset_name == "Aircraft":
+  elif dataset_name == "aircraft":
     return create_Aircraft_spec(root)
-  elif dataset_name == "Traffic Signs":
+  elif dataset_name == "traffic_signs":
     return create_Traffic_spec(root)
-  elif dataset_name == "MSCOCO":
+  elif dataset_name == "mscoco":
     return create_coco_spec(root)
-  elif dataset_name == "Fungi":
+  elif dataset_name == "fungi":
     return create_fungi_spec(root)
   elif dataset_name == "MNIST":
     return create_MNIST_spec(root)
