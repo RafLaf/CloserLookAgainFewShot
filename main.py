@@ -47,6 +47,7 @@ def parse_option():
     parser.add_argument('--pretrained', type=str, help="pretrained path") 
     parser.add_argument('--tag', help='tag of experiment')
     parser.add_argument('--resume', help='resume path')
+    parser.add_argument('--save-stats', help='path to save test stats')
 
     args, unparsed = parser.parse_known_args()
 
@@ -148,7 +149,13 @@ def test(config):
         load_pretrained(config, model, logger)
 
     # if model has adapters like in TSA
-    if hasattr(model, 'mode') and model.mode == "NCC":
+    #print(config.MODEL.CLASSIFIER_PARAMETERS)
+    if config.MODEL.TYPE=='fewshot_finetune':
+        condition  = config.MODEL.CLASSIFIER_PARAMETERS[-2] or config.MODEL.CLASSIFIER_PARAMETERS[-3]
+    else:
+        condition = False
+
+    if hasattr(model, 'mode') and model.mode == "NCC" and condition:
         model.append_adapter()
 
 
@@ -305,7 +312,8 @@ def testing(config, dataset,data_loader, model):
                 f'Loss {loss_meter.val:.2f} ({loss_meter.avg:.2f})\t'
                 f'Acc@1 {acc_meter.val:.2f} ({acc_meter.avg:.2f})\t')
     accs = torch.stack(accs)
-
+    if args.save_stats:        
+        torch.save(accs, args.save_stats)
     ci = (1.96*torch.std(accs)/math.sqrt(accs.shape[0])).item()
     return acc_meter.avg, loss_meter.avg, ci
 

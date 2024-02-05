@@ -17,7 +17,7 @@ class FinetuneModule(nn.Module):
         self.mode = config.MODEL.CLASSIFIER_PARAMETERS[-1]
 
         
-        if not self.mode == "NCC":
+        if not self.mode == "NCC" or not (config.MODEL.CLASSIFIER_PARAMETERS[-2] or config.MODEL.CLASSIFIER_PARAMETERS[-3]):
             classifier_hyperparameters = [self.backbone]+config.MODEL.CLASSIFIER_PARAMETERS
             self.classifier = get_classifier(config.MODEL.CLASSIFIER, *classifier_hyperparameters)
     
