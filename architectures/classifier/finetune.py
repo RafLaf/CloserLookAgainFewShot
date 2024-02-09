@@ -133,7 +133,6 @@ class Finetuner(nn.Module):
             for epoch in range(self.ft_epoch):
                 # randomly suffule support set
                 rand_id = np.random.permutation(support_size)
-
                 for i in range(0, support_size , self.ft_batchsize):
                     # by default, cosine LR shedule is used.
                     lr_1 = 0.5 * self.ft_lr_1* (1. + math.cos(math.pi * step / global_steps))
@@ -198,5 +197,16 @@ class Finetuner(nn.Module):
 
         return classification_scores
 
-def create_model(backbone, ft_batchsize, feed_query_batchsize, ft_epoch,ft_lr_1,ft_lr_2, use_alpha, use_beta, head = 'fc'):
-    return Finetuner(backbone, ft_batchsize, feed_query_batchsize, ft_epoch,ft_lr_1,ft_lr_2, use_alpha, use_beta, head)
+def create_model(backbone, ft_batchsize, feed_query_batchsize, ft_epoch, ft_lr_1, ft_lr_2, use_alpha, use_beta, head='fc'):
+    print("Arguments of create_model:")
+    print("backbone:", backbone)
+    print("ft_batchsize:", ft_batchsize)
+    print("feed_query_batchsize:", feed_query_batchsize)
+    print("ft_epoch:", ft_epoch)
+    print("ft_lr_1:", ft_lr_1)
+    print("ft_lr_2:", ft_lr_2)
+    print("use_alpha:", use_alpha)
+    print("use_beta:", use_beta)
+    print("head:", head)
+    
+    return Finetuner(backbone, ft_batchsize, feed_query_batchsize, ft_epoch, ft_lr_1, ft_lr_2, use_alpha, use_beta, head)

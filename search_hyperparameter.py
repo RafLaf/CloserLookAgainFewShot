@@ -99,7 +99,7 @@ def search_hyperparameter(config):
     if lr_head_range is None:
         lr_head_range = [0]
     
-    path = os.path.join(config.OUTPUT, "results.json")
+    path = os.path.join(config.OUTPUT, "results_search.json")
     with open(path, 'w') as f:
         dic = []
         json.dump(dic, f)
