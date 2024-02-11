@@ -1,5 +1,6 @@
 import yaml
 import os
+import sys
 
 all_roots = {}
 all_roots["imagenet"] = "PATH-TO-IMAGENET" #0
@@ -89,15 +90,16 @@ Data["DATA"]["IMG_SIZE"] = 224
 #Data["MODEL"]["BACKBONE"] = 'resnet12'
 # Data["MODEL"]["BACKBONE"] = '
 # resnet50'
-CLIP=False
-if CLIP:
+model=sys.argv[1]
+if model == 'clip':
    Data["MODEL"]["BACKBONE"] = 'clip'
-   model='clip'
-else:
+elif model == 'dino':
    Data["MODEL"]["BACKBONE"] = 'DINO_ViT'
    Data["MODEL"]["BACKBONE_HYPERPARAMETERS"] = ['base', 16]
    Data["MODEL"]["PRETRAINED"] = '/home/raphael/Documents/models/DINO/dino_vitbase16_pretrain.pth'
-   model='dino'
+elif model=='dinov2':
+   Data["MODEL"]["BACKBONE"] = 'DINO_v2'
+   Data["MODEL"]["BACKBONE_HYPERPARAMETERS"] = ['dinov2_vitb14_reg']
 
 
 #Data["MODEL"]["PRETRAINED"] = '/home/raphael/Documents/models/ce_miniImageNet_res12.pth'# for example
@@ -138,7 +140,12 @@ for method in list_methods:
       if method == 'NCC':
          Data["MODEL"]["CLASSIFIER_PARAMETERS"] = [100,100,0,0.0,0.0,False,False,"NCC"]
       elif method == 'finetune':
-         Data["MODEL"]["CLASSIFIER_PARAMETERS"] = [100,100,10,0.02,0.1,False,False,"fc"]
+         if model == 'clip':
+            Data["MODEL"]["CLASSIFIER_PARAMETERS"] = [100,100,30,0.0001,0.1,False,False,"fc"]
+         elif model == 'dino':
+            Data["MODEL"]["CLASSIFIER_PARAMETERS"] = [100,100,30,0.001,0.1,False,False,"fc"]
+         elif model == 'dinov2':
+            Data["MODEL"]["CLASSIFIER_PARAMETERS"] = [100,100,30,0.0001,0.1,False,False,"fc"]
    elif method == 'LR':
       Data["MODEL"]["TYPE"] = "Episodic_Model"
       Data["MODEL"]["CLASSIFIER"] = "LR"
