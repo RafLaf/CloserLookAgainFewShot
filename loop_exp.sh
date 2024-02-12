@@ -20,7 +20,7 @@ for method in "NCC" "finetune" "LR" "matchingnet" "protohead"; do
 
             echo "Running experiment with config: $yaml_file"
             # Run the Python command with the YAML configuration
-            mkdir results/"$model"/"$method"
+            mkdir results/5-shot/"$model"/"$method"
             python main.py --cfg "$yaml_file" --save-stats results/5-shot/"$model"/"$method"/"$dataset".pt
             
         done
